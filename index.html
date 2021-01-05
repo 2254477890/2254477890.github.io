@@ -172,7 +172,84 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="1-环境环境"><a href="#1-环境环境" class="headerlink" title="1. 环境环境"></a>1. 环境环境</h1><h2 id="1-1-安装Git"><a href="#1-1-安装Git" class="headerlink" title="1.1 安装Git"></a>1.1 安装Git</h2><p>请参考【1】</p>
+<h2 id="1-2-安装node-js"><a href="#1-2-安装node-js" class="headerlink" title="1.2 安装node.js"></a>1.2 安装node.js</h2><p>下载：<a target="_blank" rel="noopener" href="http://nodejs.org/download/">http://nodejs.org/download/</a></p>
+<p>可以下载 node-v0.10.33-x64.msi</p>
+<p>安装时直接保持默认配置即可。</p>
+<h1 id="2、搭建github博客"><a href="#2、搭建github博客" class="headerlink" title="2、搭建github博客"></a>2、搭建github博客</h1><h2 id="2-1-创建仓库"><a href="#2-1-创建仓库" class="headerlink" title="2.1. 创建仓库"></a>2.1. 创建仓库</h2><p>新建一个名为<code>你的用户名.github.io</code>的仓库，比如说，如果你的github用户名是test，那么你就新建<code>test.github.io</code>的仓库（必须是你的用户名，其它名称无效），将来你的网站访问地址就是 <a target="_blank" rel="noopener" href="http://test.github.io/">http://test.github.io</a> 了，是不是很方便？</p>
+<p>由此可见，每一个github账户最多只能创建一个这样可以直接使用域名访问的仓库。</p>
+<h1 id="3、配置SSH-key"><a href="#3、配置SSH-key" class="headerlink" title="3、配置SSH key"></a>3、配置SSH key</h1><h2 id="3-1"><a href="#3-1" class="headerlink" title="3.1"></a>3.1</h2><p>为什么要配置这个呢？因为你提交代码肯定要拥有你的github权限才可以，但是直接使用用户名和密码太不安全了，所以我们使用ssh key来解决本地和服务器的连接问题。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/. ssh <span class="comment">#检查本机已存在的ssh密钥</span></span><br></pre></td></tr></table></figure>
+<p>如果提示：No such file or directory 说明你是第一次使用git。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;邮件地址&quot;</span><br></pre></td></tr></table></figure>
+<p>然后连续3次回车，最终会生成一个文件在用户目录下，打开用户目录，找到<code>.ssh\id_rsa.pub</code>文件，记事本打开并复制里面的内容，打开你的github主页，进入个人设置 -&gt; SSH and GPG keys -&gt; New SSH key：</p>
+<p><img src="http://image.liuxianan.com/201608/20160818_143914_495_9084.png" alt="img"></p>
+<p>将刚复制的内容粘贴到key那里，title随便填，保存。</p>
+<h2 id="3-2-测试是否成功"><a href="#3-2-测试是否成功" class="headerlink" title="3.2. 测试是否成功"></a>3.2. 测试是否成功</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com # 注意邮箱地址不用改</span><br></pre></td></tr></table></figure>
+<p>如果提示<code>Are you sure you want to continue connecting (yes/no)?</code>，输入yes，然后会看到：</p>
+<blockquote>
+<p>Hi liuxianan! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
+</blockquote>
+<p>看到这个信息说明SSH已配置成功！</p>
+<p>此时你还需要配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;liuxianan&quot;&#x2F;&#x2F; 你的github用户名，非昵称</span><br><span class="line">$ git config --global user.email  &quot;xxx@qq.com&quot;&#x2F;&#x2F; 填写你的github注册邮箱</span><br></pre></td></tr></table></figure>
+<h1 id="使用hexo写博客"><a href="#使用hexo写博客" class="headerlink" title="使用hexo写博客"></a>使用hexo写博客</h1><h2 id="4-1-hexo简介"><a href="#4-1-hexo简介" class="headerlink" title="4.1. hexo简介"></a>4.1. hexo简介</h2><p>Hexo是一个简单、快速、强大的基于 Github Pages 的博客发布工具，支持Markdown格式，有众多优秀插件和主题。</p>
+<p>官网： <a target="_blank" rel="noopener" href="http://hexo.io/">http://hexo.io</a><br> github: <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo">https://github.com/hexojs/hexo</a></p>
+<h2 id="4-2-原理"><a href="#4-2-原理" class="headerlink" title="4.2. 原理"></a>4.2. 原理</h2><p>由于github  pages存放的都是静态文件，博客存放的不只是文章内容，还有文章列表、分类、标签、翻页等动态内容，假如每次写完一篇文章都要手动更新博文目录和相关链接信息，相信谁都会疯掉，所以hexo所做的就是将这些md文件都放在本地，每次写完文章后调用写好的命令来批量完成相关页面的生成，然后再将有改动的页面提交到github。</p>
+<h2 id="4-3-注意事项"><a href="#4-3-注意事项" class="headerlink" title="4.3. 注意事项"></a>4.3. 注意事项</h2><p>安装之前先来说几个注意事项：</p>
+<ol>
+<li>很多命令既可以用Windows的cmd来完成，也可以使用git bash来完成，但是部分命令会有一些问题，为避免不必要的问题，建议全部使用git bash来执行；</li>
+<li>hexo不同版本差别比较大，网上很多文章的配置信息都是基于2.x的，所以注意不要被误导；</li>
+<li>hexo有2种<code>_config.yml</code>文件，一个是根目录下的全局的<code>_config.yml</code>，一个是各个<code>theme</code>下的；</li>
+</ol>
+<h2 id="4-4-安装"><a href="#4-4-安装" class="headerlink" title="4.4. 安装"></a>4.4. 安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo</span><br></pre></td></tr></table></figure>
+<h2 id="4-5-初始化"><a href="#4-5-初始化" class="headerlink" title="4.5. 初始化"></a>4.5. 初始化</h2><p>在电脑的某个地方新建一个名为hexo的文件夹（名字可以随便取），比如我的是<code>F:\Workspaces\hexo</code>，由于这个文件夹将来就作为你存放代码的地方，所以最好不要随便放。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /f/Workspaces/hexo/</span><br><span class="line">$ hexo init</span><br></pre></td></tr></table></figure>
+<p>hexo会自动下载一些文件到这个目录，包括node_modules，目录结构如下图：</p>
+<p><img src="http://image.liuxianan.com/201608/20160818_115922_773_1148.png" alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g <span class="comment"># 生成</span></span><br><span class="line">$ hexo s <span class="comment"># 启动服务</span></span><br></pre></td></tr></table></figure>
+<p>执行以上命令之后，hexo就会在public文件夹生成相关html文件，这些文件将来都是要提交到github去的：</p>
+<p><img src="http://image.liuxianan.com/201608/20160818_120700_028_2426.png" alt="img"></p>
+<p><code>hexo s</code>是开启本地预览服务，打开浏览器访问 <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000</a> 即可看到内容，很多人会碰到浏览器一直在转圈但是就是加载不出来的问题，一般情况下是因为端口占用的缘故，因为4000这个端口太常见了，解决端口冲突问题请参考这篇文章：</p>
+<p><a target="_blank" rel="noopener" href="http://blog.liuxianan.com/windows-port-bind.html">http://blog.liuxianan.com/windows-port-bind.html</a></p>
+<p>第一次初始化的时候hexo已经帮我们写了一篇名为 Hello World 的文章，默认的主题比较丑，打开时就是这个样子：</p>
+<p><img src="http://image.liuxianan.com/201608/20160818_132443_202_6848.png" alt="img"></p>
+<h2 id="4-6-修改主题"><a href="#4-6-修改主题" class="headerlink" title="4.6. 修改主题"></a>4.6. 修改主题</h2><p>既然默认主题很丑，那我们别的不做，首先来替换一个好看点的主题。这是 <a target="_blank" rel="noopener" href="https://hexo.io/themes/">官方主题</a>。</p>
+<p>个人比较喜欢的2个主题：<a target="_blank" rel="noopener" href="https://github.com/pinggod/hexo-theme-jekyll">hexo-theme-jekyll</a> 和 <a target="_blank" rel="noopener" href="https://github.com/litten/hexo-theme-yilia">hexo-theme-yilia</a>。</p>
+<p>首先下载这个主题：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /f/Workspaces/hexo/</span><br><span class="line">$ git <span class="built_in">clone</span> https://github.com/litten/hexo-theme-yilia.git themes/yilia</span><br></pre></td></tr></table></figure>
+<p>下载后的主题都在这里：</p>
+<p><img src="http://image.liuxianan.com/201608/20160818_134500_245_0912.png" alt="img"></p>
+<p>修改<code>_config.yml</code>中的<code>theme: landscape</code>改为<code>theme: yilia</code>，然后重新执行<code>hexo g</code>来重新生成。</p>
+<p>如果出现一些莫名其妙的问题，可以先执行<code>hexo clean</code>来清理一下public的内容，然后再来重新生成和发布。</p>
+<h2 id="4-7-上传之前"><a href="#4-7-上传之前" class="headerlink" title="4.7. 上传之前"></a>4.7. 上传之前</h2><p>在上传代码到github之前，一定要记得先把你以前所有代码下载下来（虽然github有版本管理，但备份一下总是好的），因为从hexo提交代码时会把你以前的所有代码都删掉。</p>
+<h2 id="4-8-上传到github"><a href="#4-8-上传到github" class="headerlink" title="4.8. 上传到github"></a>4.8. 上传到github</h2><p>如果你一切都配置好了，发布上传很容易，一句<code>hexo d</code>就搞定，当然关键还是你要把所有东西配置好。</p>
+<p>首先，<code>ssh key</code>肯定要配置好。</p>
+<p>其次，配置<code>_config.yml</code>中有关deploy的部分：</p>
+<p>正确写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: git@github.com:liuxianan&#x2F;liuxianan.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<p>错误写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: github</span><br><span class="line">  repository: https:&#x2F;&#x2F;github.com&#x2F;liuxianan&#x2F;liuxianan.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<p>后面一种写法是hexo2.x的写法，现在已经不行了，无论是哪种写法，此时直接执行<code>hexo d</code>的话一般会报如下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Deployer not found: github 或者 Deployer not found: git</span><br></pre></td></tr></table></figure>
+<p>原因是还需要安装一个插件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>其它命令不确定，部署这个命令一定要用git bash，否则会提示<code>Permission denied (publickey).</code></p>
+<p>打开你的git bash，输入<code>hexo d</code>就会将本次有改动的代码全部提交，没有改动的不会：</p>
+<p><img src="http://image.liuxianan.com/201608/20160818_140441_769_5024.png" alt="img"></p>
+<h2 id="4-9-保留CNAME、README-md等文件"><a href="#4-9-保留CNAME、README-md等文件" class="headerlink" title="4.9. 保留CNAME、README.md等文件"></a>4.9. 保留CNAME、README.md等文件</h2><p>提交之后网页上一看，发现以前其它代码都没了，此时不要慌，一些非md文件可以把他们放到source文件夹下，这里的所有文件都会原样复制（除了md文件）到public目录的：</p>
+<p><img src="http://image.liuxianan.com/201608/20160818_141037_580_8035.png" alt="img"></p>
+<p>由于hexo默认会把所有md文件都转换成html，包括README.md，所有需要每次生成之后、上传之前，手动将README.md复制到public目录，并删除README.html。</p>
+<h2 id="4-11-config-yml"><a href="#4-11-config-yml" class="headerlink" title="4.11. _config.yml"></a>4.11. _config.yml</h2><p>这里面都是一些全局配置，每个参数的意思都比较简单明了，所以就不作详细介绍了。</p>
+<p>需要特别注意的地方是，冒号后面必须有一个空格，否则可能会出问题。</p>
+<h2 id="4-12-写博客"><a href="#4-12-写博客" class="headerlink" title="4.12. 写博客"></a>4.12. 写博客</h2><p>定位到我们的hexo根目录，执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &#39;my-first-blog&#39;</span><br></pre></td></tr></table></figure>
+<p>hexo会帮我们在<code>_posts</code>下生成相关md文件：</p>
+<p><img src="http://image.liuxianan.com/201608/20160823_183047_352_1475.png" alt="img"></p>
+<p>我们只需要打开这个文件就可以开始写博客了，默认生成如下内容：</p>
+<p><img src="http://image.liuxianan.com/201608/20160823_183325_470_9306.png" alt="img"></p>
+<p>当然你也可以直接自己新建md文件，用这个命令的好处是帮我们自动生成了时间。</p>
+
       
 
       
@@ -180,6 +257,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">博客</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -376,6 +464,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">博客</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
